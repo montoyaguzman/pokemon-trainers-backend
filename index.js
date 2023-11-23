@@ -3,7 +3,7 @@ const app = require('./src/app')
 const PORT = 3000;
 
 app.listen(PORT, () => {
-    console.log(`Api rols running on ${PORT}...`);
+    console.log(`Api rols running on ${PORT}... rewirte`);
 });
 
 module.exports = app;
