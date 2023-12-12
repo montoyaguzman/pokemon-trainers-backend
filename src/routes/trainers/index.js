@@ -1,29 +1,21 @@
 const express = require('express');
 const trainersRoutes = express.Router();
-const { trainers } = require('../../data/trainers');
 
-trainersRoutes.get('/', (req, res) => {
+const {
+    getAll,
+    createNew,
+    editOne,
+    deleteOne,
+} = require('../../controller/trainers');
 
-    const name = req.query.name || '';
-    const isChampion = req.query.isChampion === 'true' ? true : false
+trainersRoutes.get('/', getAll);
 
-    const isLikeName = ((trainer) => {
-        return trainer.name.toLocaleLowerCase().includes(name.toLocaleLowerCase())
-    });
+// trainersRoutes.get('/:id', getById);
 
-    const hasWinnedTournaments = ((trainer) => {
-        return trainer.winnedTournaments.length > 0;
-    });
+trainersRoutes.post('/', createNew);
 
+trainersRoutes.patch('/:id', editOne);
 
-    let data = trainers.filter(isLikeName);
+trainersRoutes.delete('/:id', deleteOne);
 
-    if (isChampion) {
-        data = data.filter(hasWinnedTournaments);
-    }
-
-    res.json(data);
-
-});
-
-module.exports = trainersRoutes;
+module.exports = { trainersRoutes };

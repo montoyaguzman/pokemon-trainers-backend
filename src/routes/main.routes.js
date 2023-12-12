@@ -1,5 +1,5 @@
 const express = require('express');
-const trainersRoutes = require('./trainers/index');
+const { trainersRoutes } = require('./trainers/index');
 
 const routerApi = (app) => {
   const router = express.Router();
@@ -10,4 +10,4 @@ const routerApi = (app) => {
   router.use('/trainers', trainersRoutes);
 };
 
-module.exports = routerApi;
+module.exports = { routerApi };
