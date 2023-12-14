@@ -17,8 +17,9 @@ const getAll = async (req, res) => {
 const createNew = async (req, res) => {
     const newTrainer = req.body;
     try {
-        await trainerObjectService.createNew(newTrainer);
-        res.status(201).json(newTrainer);
+        const isRegisterOk = await trainerObjectService.createNew(newTrainer);
+        const statusRegister = isRegisterOk ? 'sucess' : 'fail';
+        res.status(201).json({ status: statusRegister, data: newTrainer });
     } catch (error) {
         res.status(404).json({ message: 'no hay datos' });
     }

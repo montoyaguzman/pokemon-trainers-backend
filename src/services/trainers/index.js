@@ -1,5 +1,5 @@
 const { trainers } = require('../../data/trainers');
-
+const conn = require('../../db/connection');
 class TrainersServices {
 
     constructor() {
@@ -11,12 +11,27 @@ class TrainersServices {
         this.data = trainers;
     }
 
-    getData(id, name, isChampion) {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve(this.data);
-            }, 1000);
-        });
+    async getData(id, name, isChampion) {
+
+        try {
+            const result = await conn.query('SELECT Trainers.name, Trainers.age, Regions.name AS region FROM Trainers INNER JOIN Regions ON Trainers.idRegion = Regions.idRegion');
+            // console.log(result)
+            // console.log(result.rows)
+            return result.rows;
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        } finally {
+            // conn.close();
+        }
+
+
+        // return new Promise((resolve, reject) => {
+        //     setTimeout(() => {
+        //         resolve(this.data);
+        //     }, 1000);
+        // });
+
         // const name = req.query.name || '';
         // const isChampion = req.query.isChampion === 'true' ? true : false
 
@@ -38,7 +53,21 @@ class TrainersServices {
         // res.json(data);
     }
 
-    createNew(newTrainer) {
+    async createNew(newTrainer) {
+
+        const { name, age, regionId } = newTrainer;
+
+        try {
+            const queryInsert = 'INSERT INTO Trainers(name, age, idRegion) VALUES ($1, $2, $3);' // RETURNING id
+            const result = await conn.query(queryInsert, [name, age, regionId]);
+            return true;
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        } finally {
+            // conn.close();
+        }
+
     }
 
     editOne(id, newTrainer) {
